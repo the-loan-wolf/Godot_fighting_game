@@ -152,7 +152,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("26_86rna")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Kick",
 "speed": 5.0
 }, {
@@ -166,7 +166,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("29_ax26h")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Punch",
 "speed": 5.0
 }, {
@@ -212,13 +212,16 @@ height = 232.0
 
 [node name="Player" type="CharacterBody2D" unique_id=100103904]
 position = Vector2(238, 284)
+collision_mask = 7
 script = ExtResource("1_331ug")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1580333798]
 position = Vector2(0, 92)
 scale = Vector2(5, 5)
 sprite_frames = SubResource("SpriteFrames_okh28")
-animation = &"Jab"
+animation = &"Punch"
+frame = 2
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1073877035]
 position = Vector2(-12.999999, 139)

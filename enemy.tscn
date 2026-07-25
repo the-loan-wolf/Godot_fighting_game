@@ -1,0 +1,119 @@
+[gd_scene format=3 uid="uid://duaqn1j2t863m"]
+
+[ext_resource type="Script" uid="uid://b8ld76picyjbm" path="res://enemy.gd" id="1_nnovl"]
+[ext_resource type="Texture2D" uid="uid://ccnpn88xm4fo" path="res://assets/Enemy-Punk/Hurt/hurt1.png" id="2_qoy1w"]
+[ext_resource type="Texture2D" uid="uid://d0yj3n1ayysp4" path="res://assets/Enemy-Punk/Hurt/hurt2.png" id="3_qtypq"]
+[ext_resource type="Texture2D" uid="uid://c46k33pqlvqrf" path="res://assets/Enemy-Punk/Hurt/hurt3.png" id="4_xhrcy"]
+[ext_resource type="Texture2D" uid="uid://chr1m3aq12fkw" path="res://assets/Enemy-Punk/Hurt/hurt4.png" id="5_7l372"]
+[ext_resource type="Texture2D" uid="uid://15jh6gj4yi3k" path="res://assets/Enemy-Punk/Idle/idle1.png" id="6_t6nbh"]
+[ext_resource type="Texture2D" uid="uid://cfy8vddlmj7pv" path="res://assets/Enemy-Punk/Idle/idle2.png" id="7_hx54d"]
+[ext_resource type="Texture2D" uid="uid://mvu5hvgobosg" path="res://assets/Enemy-Punk/Idle/idle3.png" id="8_mgfi4"]
+[ext_resource type="Texture2D" uid="uid://ni1vjt2bnh1u" path="res://assets/Enemy-Punk/Idle/idle4.png" id="9_5ytrp"]
+[ext_resource type="Texture2D" uid="uid://d2phfhaf880n5" path="res://assets/Enemy-Punk/Punch/punch1.png" id="10_pbkth"]
+[ext_resource type="Texture2D" uid="uid://bc1hvhd5opfbi" path="res://assets/Enemy-Punk/Punch/punch2.png" id="11_t5oue"]
+[ext_resource type="Texture2D" uid="uid://4qomi3wn3xmu" path="res://assets/Enemy-Punk/Punch/punch3.png" id="12_og6rg"]
+[ext_resource type="Texture2D" uid="uid://bwxks2xod7hl6" path="res://assets/Enemy-Punk/Walk/walk1.png" id="13_avsiu"]
+[ext_resource type="Texture2D" uid="uid://dl5w7wwssiavh" path="res://assets/Enemy-Punk/Walk/walk2.png" id="14_x52b2"]
+[ext_resource type="Texture2D" uid="uid://bnui4rowtcb21" path="res://assets/Enemy-Punk/Walk/walk3.png" id="15_kmhk7"]
+[ext_resource type="Texture2D" uid="uid://c3vt23vadm4hf" path="res://assets/Enemy-Punk/Walk/walk4.png" id="16_eupy8"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_okh28"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_qoy1w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_qtypq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_xhrcy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_7l372")
+}],
+"loop": 1,
+"name": &"Hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_t6nbh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_hx54d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_mgfi4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_5ytrp")
+}],
+"loop": 1,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_pbkth")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_t5oue")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_og6rg")
+}],
+"loop": 0,
+"name": &"Punch",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_avsiu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_x52b2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_kmhk7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_eupy8")
+}],
+"loop": 1,
+"name": &"Walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_okh28"]
+radius = 0.9639056
+height = 8.394013
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_okh28"]
+size = Vector2(97, 37)
+
+[node name="enemy" type="CharacterBody2D" unique_id=688991996]
+collision_layer = 2
+script = ExtResource("1_nnovl")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1439738054]
+scale = Vector2(0.65610254, 0.84173155)
+sprite_frames = SubResource("SpriteFrames_okh28")
+animation = &"Punch"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2014048984]
+position = Vector2(-3.0000002, 6)
+rotation = -3.1415925
+scale = Vector2(8.299567, 4.7653008)
+shape = SubResource("CapsuleShape2D_okh28")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1782324747]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=44386801]
+position = Vector2(-3, 8)
+shape = SubResource("RectangleShape2D_okh28")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

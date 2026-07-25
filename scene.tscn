@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cq7albjp8mhc5"]
 
 [ext_resource type="PackedScene" uid="uid://dbswbumlyy22" path="res://player.tscn" id="1_ulcgi"]
+[ext_resource type="PackedScene" uid="uid://duaqn1j2t863m" path="res://enemy.tscn" id="2_nxogm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_okh28"]
 size = Vector2(1149, 81)
@@ -8,7 +9,7 @@ size = Vector2(1149, 81)
 [node name="Scene" type="Node2D" unique_id=960983833]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1649282652]
-collision_mask = 0
+collision_mask = 3
 
 [node name="ColorRect" type="ColorRect" parent="StaticBody2D" unique_id=1252986674]
 offset_left = 8.0
@@ -22,3 +23,8 @@ position = Vector2(582, 609)
 shape = SubResource("RectangleShape2D_okh28")
 
 [node name="Player" parent="." unique_id=100103904 instance=ExtResource("1_ulcgi")]
+position = Vector2(89, 317)
+
+[node name="enemy" parent="." unique_id=688991996 instance=ExtResource("2_nxogm")]
+position = Vector2(573, 410.00003)
+scale = Vector2(6, 6)
