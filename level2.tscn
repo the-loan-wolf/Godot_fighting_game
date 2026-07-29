@@ -1,13 +1,13 @@
-[gd_scene format=4 uid="uid://cq7albjp8mhc5"]
+[gd_scene format=4 uid="uid://dhd11pugticlk"]
 
-[ext_resource type="Texture2D" uid="uid://htp20w8d8vgs" path="res://assets/Stage Layers/tileset.png" id="1_u3cyc"]
-[ext_resource type="PackedScene" uid="uid://dbswbumlyy22" path="res://player.tscn" id="1_ulcgi"]
-[ext_resource type="Texture2D" uid="uid://bp1swlcn4evd" path="res://assets/Stage Layers/props/hydrant.png" id="2_m7jmp"]
-[ext_resource type="PackedScene" uid="uid://duaqn1j2t863m" path="res://enemy.tscn" id="2_nxogm"]
-[ext_resource type="PackedScene" uid="uid://cvn1vybe4nxcb" path="res://hud.tscn" id="3_3253y"]
+[ext_resource type="Texture2D" uid="uid://htp20w8d8vgs" path="res://assets/Stage Layers/tileset.png" id="1_r6vdu"]
+[ext_resource type="Texture2D" uid="uid://bp1swlcn4evd" path="res://assets/Stage Layers/props/hydrant.png" id="2_21xmu"]
+[ext_resource type="PackedScene" uid="uid://dbswbumlyy22" path="res://player.tscn" id="3_8i3m3"]
+[ext_resource type="PackedScene" uid="uid://cvn1vybe4nxcb" path="res://hud.tscn" id="5_qulpo"]
+[ext_resource type="PackedScene" uid="uid://bphjuhhur6c61" path="res://enemy_knight.tscn" id="5_r6vdu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m7jmp"]
-texture = ExtResource("1_u3cyc")
+texture = ExtResource("1_r6vdu")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -541,7 +541,7 @@ tile_set = SubResource("TileSet_okh28")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1971718521]
 position = Vector2(814.00006, 421.00003)
 scale = Vector2(3, 3)
-texture = ExtResource("2_m7jmp")
+texture = ExtResource("2_21xmu")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1649282652]
 visible = false
@@ -558,11 +558,11 @@ color = Color(0, 0.5415018, 0.25092602, 1)
 position = Vector2(582, 609)
 shape = SubResource("RectangleShape2D_okh28")
 
-[node name="Player" parent="." unique_id=100103904 instance=ExtResource("1_ulcgi")]
-position = Vector2(89, 317)
+[node name="Player" parent="." unique_id=100103904 instance=ExtResource("3_8i3m3")]
+position = Vector2(1005, 278)
 
-[node name="enemy" parent="." unique_id=688991996 instance=ExtResource("2_nxogm")]
-position = Vector2(573, 410.00003)
-scale = Vector2(6, 6)
+[node name="HUD" parent="." unique_id=960992520 instance=ExtResource("5_qulpo")]
 
-[node name="HUD" parent="." unique_id=960992520 instance=ExtResource("3_3253y")]
+[node name="Enemy_knight" parent="." unique_id=1506475191 instance=ExtResource("5_r6vdu")]
+position = Vector2(130, 352)
+scale = Vector2(3.5, 3.5)

@@ -16,6 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://dl5w7wwssiavh" path="res://assets/Enemy-Punk/Walk/walk2.png" id="14_x52b2"]
 [ext_resource type="Texture2D" uid="uid://bnui4rowtcb21" path="res://assets/Enemy-Punk/Walk/walk3.png" id="15_kmhk7"]
 [ext_resource type="Texture2D" uid="uid://c3vt23vadm4hf" path="res://assets/Enemy-Punk/Walk/walk4.png" id="16_eupy8"]
+[ext_resource type="AudioStream" uid="uid://cx0d2xiqje0qb" path="res://assets/universfield-male-scream-121085.mp3" id="17_jmwgi"]
+[ext_resource type="AudioStream" uid="uid://y1rqd1hdupo7" path="res://assets/enemny punch.mp3" id="18_g2u8i"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_okh28"]
 animations = [{
@@ -23,7 +25,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("2_qoy1w")
 }, {
-"duration": 1.0,
+"duration": 0.92,
 "texture": ExtResource("3_qtypq")
 }, {
 "duration": 1.0,
@@ -31,6 +33,17 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("5_7l372")
+}],
+"loop": 0,
+"name": &"Death",
+"speed": 2.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_qoy1w")
+}, {
+"duration": 0.92,
+"texture": ExtResource("3_qtypq")
 }],
 "loop": 1,
 "name": &"Hurt",
@@ -82,38 +95,85 @@ animations = [{
 }],
 "loop": 1,
 "name": &"Walk",
-"speed": 5.0
+"speed": 10.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_okh28"]
 radius = 0.9639056
-height = 8.394013
+height = 7.554612
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_06q3m"]
+radius = 5.0
+height = 12.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_okh28"]
 size = Vector2(97, 37)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_06q3m"]
+size = Vector2(17, 21)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ubj4u"]
+radius = 3.0
+height = 10.0
+
 [node name="enemy" type="CharacterBody2D" unique_id=688991996]
-collision_layer = 2
+collision_layer = 4
+floor_max_angle = 0.0
+floor_snap_length = 0.0
 script = ExtResource("1_nnovl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1439738054]
 scale = Vector2(0.65610254, 0.84173155)
 sprite_frames = SubResource("SpriteFrames_okh28")
 animation = &"Punch"
+frame = 2
+frame_progress = 1.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2014048984]
-position = Vector2(-3.0000002, 6)
+[node name="body" type="CollisionShape2D" parent="." unique_id=2014048984]
+position = Vector2(-0.99999994, 9)
 rotation = -3.1415925
 scale = Vector2(8.299567, 4.7653008)
 shape = SubResource("CapsuleShape2D_okh28")
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1782324747]
+[node name="head" type="CollisionShape2D" parent="." unique_id=1912592322]
+position = Vector2(-1, -9)
+shape = SubResource("CapsuleShape2D_06q3m")
+
+[node name="playerDetectionArea" type="Area2D" parent="." unique_id=1782324747]
+visible = false
 collision_layer = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=44386801]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="playerDetectionArea" unique_id=44386801]
 position = Vector2(-3, 8)
 shape = SubResource("RectangleShape2D_okh28")
 
+[node name="hurtBox" type="Area2D" parent="." unique_id=1635218318]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hurtBox" unique_id=458815888]
+position = Vector2(-1.5, 2.5)
+shape = SubResource("RectangleShape2D_06q3m")
+
+[node name="Hurt_sound" type="AudioStreamPlayer2D" parent="." unique_id=1671665196]
+visible = false
+stream = ExtResource("17_jmwgi")
+
+[node name="hitBox" type="Area2D" parent="." unique_id=259030537 groups=["enemy_attack"]]
+visible = false
+position = Vector2(-20, -1)
+collision_layer = 4
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitBox" unique_id=1179732543]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_ubj4u")
+
+[node name="Punch_sound" type="AudioStreamPlayer2D" parent="." unique_id=2135352362]
+position = Vector2(-20, -1)
+stream = ExtResource("18_g2u8i")
+pitch_scale = 1.5
+
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
-[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="area_entered" from="playerDetectionArea" to="." method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="playerDetectionArea" to="." method="_on_area_2d_body_entered"]
+[connection signal="area_entered" from="hurtBox" to="." method="_on_hurt_box_area_entered"]
