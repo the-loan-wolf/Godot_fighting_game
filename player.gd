@@ -4,6 +4,16 @@ const SPEED = 300.0
 const JUMP_VELOCITY = -800.0
 const JUMP_VELOCITY_dive_kick = -400.0
 
+const ANIM_IDLE = "Idle"
+const ANIM_DEATH = "Death"
+const ANIM_WALK = "Walk"
+const ANIM_JAB = "Jab"
+const ANIM_KICK = "Kick"
+const ANIM_JUMP_KICK = "Jump_kick"
+const ANIM_JUMP = "Jump"
+const ANIM_PUNCH = "Punch"
+const ANIM_DIVE_KICK = "Dive_kick"
+
 var dive_kick = false
 var jump = false
 var jab = false
@@ -15,32 +25,45 @@ var hud
 var death = false
 var got_hit = false
 
+@onready var sprite = $AnimatedSprite2D
+@onready var collisionShape = $CollisionShape2D
+@onready var hurtBox = $Hurtbox
+@onready var hurtBox_collisionShape = $Hurtbox/CollisionShape2D
+@onready var punch_hitbox = $hitBox_punch
+@onready var punch_collisionShape = $hitBox_punch/CollisionShape2D
+@onready var kick_hitbox = $hitBox_kick
+@onready var kick_collisionShape = $hitBox_kick/CollisionShape2D
+@onready var dive_kick_hitbox = $hitBox_dive_kick
+@onready var dive_kick_collisionShape = $hitBox_dive_kick/CollisionShape2D
+@onready var jump_kick_hitbox = $hitBox_jump_kick
+@onready var jump_kick_collisionShape = $hitBox_jump_kick/CollisionShape2D
+
 func _ready():
-	$hitBox_punch/CollisionShape2D.set_deferred("disabled", true)
-	$hitBox_kick/CollisionShape2D.set_deferred("disabled", true)
-	$hitBox_dive_kick/CollisionShape2D.set_deferred("disabled", true)
-	$hitBox_jump_kick/CollisionShape2D.set_deferred("disabled", true)
+	punch_collisionShape.set_deferred("disabled", true)
+	kick_collisionShape.set_deferred("disabled", true)
+	dive_kick_collisionShape.set_deferred("disabled", true)
+	jump_kick_collisionShape.set_deferred("disabled", true)
 	hud = $"../HUD"
 	add_to_group("player")
 
 func _on_animated_sprite_2d_animation_finished():
-	if $AnimatedSprite2D.animation == "Jab":
+	if sprite.animation == ANIM_JAB:
 		jab = false
-		$hitBox_punch/CollisionShape2D.disabled = true
-	if $AnimatedSprite2D.animation == "Dive_kick":
+		punch_collisionShape.disabled = true
+	if sprite.animation == ANIM_DIVE_KICK:
 		dive_kick = false
-		$hitBox_dive_kick/CollisionShape2D.disabled = true
-	if $AnimatedSprite2D.animation == "Jump":
+		dive_kick_collisionShape.disabled = true
+	if sprite.animation == ANIM_JUMP:
 		jump = false
-	if $AnimatedSprite2D.animation == "Jump_kick":
+	if sprite.animation == ANIM_JUMP_KICK:
 		jump_kick = false
-		$hitBox_jump_kick/CollisionShape2D.disabled = true
-	if $AnimatedSprite2D.animation == "Kick":
+		jump_kick_collisionShape.disabled = true
+	if sprite.animation == ANIM_KICK:
 		kick = false
-		$hitBox_kick/CollisionShape2D.disabled = true
-	if $AnimatedSprite2D.animation == "Punch":
+		kick_collisionShape.disabled = true
+	if sprite.animation == ANIM_PUNCH:
 		punch = false
-		$hitBox_punch/CollisionShape2D.disabled = true
+		punch_collisionShape.disabled = true
 
 func _physics_process(delta: float) -> void:
 	
@@ -64,58 +87,30 @@ func _physics_process(delta: float) -> void:
 			jump_kick = false
 			jump = false
 			var direction = 1
-			if $AnimatedSprite2D.flip_h:
+			if sprite.flip_h:
 				direction = -1
 			velocity = Vector2(direction * SPEED, JUMP_VELOCITY_dive_kick)
-			if $AnimatedSprite2D.flip_h:
-				if $hitBox_dive_kick.position.x > 0:
-					await get_tree().create_timer(0.12).timeout
-					$hitBox_dive_kick.position.x *= -1
-			elif not $AnimatedSprite2D.flip_h:
-				if $hitBox_dive_kick.position.x < 0:
-					await get_tree().create_timer(0.12).timeout
-					$hitBox_dive_kick.position.x *= -1
-			
-		if Input.is_action_just_pressed("Jab"):
-			jab = true
-			if $AnimatedSprite2D.flip_h:
-				if $hitBox_punch.position.x > 0:
-					$hitBox_punch.position.x *= -1
-			elif not $AnimatedSprite2D.flip_h:
-				if $hitBox_punch.position.x < 0:
-					$hitBox_punch.position.x *= -1
-					
-		if Input.is_action_just_pressed("Punch"):
-			punch = true
-			if $AnimatedSprite2D.flip_h:
-				if $hitBox_punch.position.x > 0:
-					$hitBox_punch.position.x *= -1
-			elif not $AnimatedSprite2D.flip_h:
-				if $hitBox_punch.position.x < 0:
-					$hitBox_punch.position.x *= -1
-					
-		if Input.is_action_just_pressed("Kick"):
-			kick = true 
-			if $AnimatedSprite2D.flip_h:
-				if $hitBox_kick.position.x > 0:
-					$hitBox_kick.position.x *= -1
-			elif not $AnimatedSprite2D.flip_h:
-				if $hitBox_kick.position.x < 0:
-					$hitBox_kick.position.x *= -1
-			
-			
+			flip_node(dive_kick_hitbox)
 		
-			
 		if Input.is_action_just_pressed("Jump_kick") and is_on_floor():
 			jump_kick = true
 			jump = false
 			dive_kick = false
-			if $AnimatedSprite2D.flip_h:
-				if $hitBox_jump_kick.position.x > 0:
-					$hitBox_jump_kick.position.x *= -1
-			elif not $AnimatedSprite2D.flip_h:
-				if $hitBox_jump_kick.position.x < 0:
-					$hitBox_jump_kick.position.x *= -1
+			flip_node(jump_kick_hitbox)
+		
+		if Input.is_action_just_pressed("Jab"):
+			jab = true
+			flip_node(punch_hitbox)
+		
+		if Input.is_action_just_pressed("Punch"):
+			punch = true
+			flip_node(punch_hitbox)
+		
+		if Input.is_action_just_pressed("Kick"):
+			kick = true 
+			flip_node(kick_hitbox)
+		
+		
 			#var direction = 1
 			#if $AnimatedSprite2D.flip_h:
 				#direction = -1
@@ -134,56 +129,51 @@ func _physics_process(delta: float) -> void:
 		
 		if is_on_floor():
 			if velocity.x > 0:
-				if $AnimatedSprite2D.flip_h:
-					$AnimatedSprite2D.flip_h = false
-					if $CollisionShape2D.position.x > 0:
-						$CollisionShape2D.position.x *= -1
-					if $Hurtbox.position.x > 0:
-						$Hurtbox.position.x *= -1
-				$AnimatedSprite2D.play("Walk")
+				if sprite.flip_h:
+					sprite.flip_h = false
+				flip_node(collisionShape)
+				flip_node(hurtBox)
+				sprite.play(ANIM_WALK)
 					
 			elif velocity.x < 0:
-				if not $AnimatedSprite2D.flip_h:
-					$AnimatedSprite2D.flip_h = true
-				$AnimatedSprite2D.play("Walk")
-				if $AnimatedSprite2D.flip_h:
-					if $CollisionShape2D.position.x < 0:
-						$CollisionShape2D.position.x *= -1
-					if $Hurtbox.position.x < 0:
-						$Hurtbox.position.x *= -1
+				if not sprite.flip_h:
+					sprite.flip_h = true
+				flip_node(collisionShape)
+				flip_node(hurtBox)
+				sprite.play(ANIM_WALK)
 				
 			else :
 				if jab:
-					$AnimatedSprite2D.play("Jab")
+					sprite.play(ANIM_JAB)
 					$Jab_sound.play()
-					$hitBox_punch/CollisionShape2D.set_deferred("disabled", false)
+					punch_collisionShape.set_deferred("disabled", false)
 				elif jump_kick:
-					if $AnimatedSprite2D.animation != "Jump_kick":
-						$AnimatedSprite2D.play("Jump_kick")
+					if sprite.animation != ANIM_JUMP_KICK:
+						sprite.play(ANIM_JUMP_KICK)
 						$Jump_kick_sound.play()
-						$hitBox_jump_kick/CollisionShape2D.set_deferred("disabled", false)
+						jump_kick_collisionShape.set_deferred("disabled", false)
 				elif kick:
-					if $AnimatedSprite2D.animation != "Kick":
-						$AnimatedSprite2D.play("Kick") 
+					if sprite.animation != ANIM_KICK:
+						sprite.play(ANIM_KICK) 
 						$kick_sound.play()
-						$hitBox_kick/CollisionShape2D.set_deferred("disabled", false)  
+						kick_collisionShape.set_deferred("disabled", false)  
 				elif punch:
-					if $AnimatedSprite2D.animation != "Punch":
-						$AnimatedSprite2D.play("Punch")
+					if sprite.animation != ANIM_PUNCH:
+						sprite.play(ANIM_PUNCH)
 						$Punch_sound.play()
-						$hitBox_punch/CollisionShape2D.set_deferred("disabled", false)
+						punch_collisionShape.set_deferred("disabled", false)
 				else:
-					$AnimatedSprite2D.play("Idle")
+					sprite.play(ANIM_IDLE)
 		if not is_on_floor():
 			if dive_kick:
-				if $AnimatedSprite2D.animation != "Dive_kick":
-					$AnimatedSprite2D.play("Dive_kick")
+				if sprite.animation != ANIM_DIVE_KICK:
+					sprite.play(ANIM_DIVE_KICK)
 					$Dive_kick_sound.play()
-					$hitBox_dive_kick/CollisionShape2D.set_deferred("disabled", false)
+					dive_kick_collisionShape.set_deferred("disabled", false)
 			if jump:
-				if $AnimatedSprite2D.animation != "Jump":
+				if sprite.animation != ANIM_JUMP:
 					$Jump_sound.play()
-					$AnimatedSprite2D.play("Jump")
+					sprite.play(ANIM_JUMP)
 					#$Jump_sound.play()
 		
 	
@@ -198,17 +188,23 @@ func _on_hurtbox_area_exited(area: Area2D) -> void:
 
 func Death():
 	death = true
-	$hitBox_punch/CollisionShape2D.set_deferred("disabled", true)
-	$hitBox_kick/CollisionShape2D.set_deferred("disabled", true)
-	$hitBox_dive_kick/CollisionShape2D.set_deferred("disabled", true)
-	$hitBox_jump_kick/CollisionShape2D.set_deferred("disabled", true)
+	punch_collisionShape.set_deferred("disabled", true)
+	kick_collisionShape.set_deferred("disabled", true)
+	dive_kick_collisionShape.set_deferred("disabled", true)
+	jump_kick_collisionShape.set_deferred("disabled", true)
 	#await get_tree().create_timer(0.3).timeout
 	#$Hurt_sound.play()
 	#await get_tree().create_timer(1).timeout
-	$AnimatedSprite2D.play("Death")
+	sprite.play(ANIM_DEATH)
 	#$playerDetectionArea/CollisionShape2D.set_deferred("disabled", true)
-	$Hurtbox/CollisionShape2D.set_deferred("disabled", true)
+	hurtBox_collisionShape.set_deferred("disabled", true)
 	#$CollisionShape2D.set_deferred("disabled", true)
 	#$head.set_deferred("disabled", true)
 	await get_tree().create_timer(10).timeout
 	hud.show_game_over()
+
+func flip_node(node):
+	node.position.x = abs(node.position.x)
+	
+	if sprite.flip_h:
+		node.position.x *= -1

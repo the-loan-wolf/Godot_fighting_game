@@ -543,19 +543,29 @@ position = Vector2(814.00006, 421.00003)
 scale = Vector2(3, 3)
 texture = ExtResource("2_m7jmp")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1649282652]
+[node name="ground" type="StaticBody2D" parent="." unique_id=1649282652]
 visible = false
 collision_mask = 3
 
-[node name="ColorRect" type="ColorRect" parent="StaticBody2D" unique_id=1252986674]
-offset_left = 8.0
-offset_top = 568.0
-offset_right = 1157.0
-offset_bottom = 649.0
-color = Color(0, 0.5415018, 0.25092602, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1251234928]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ground" unique_id=1251234928]
 position = Vector2(582, 609)
+shape = SubResource("RectangleShape2D_okh28")
+
+[node name="rightBorder" type="StaticBody2D" parent="." unique_id=1132145414]
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="rightBorder" unique_id=1722154537]
+position = Vector2(1194, 474)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_okh28")
+
+[node name="leftBorder" type="StaticBody2D" parent="." unique_id=1353621878]
+position = Vector2(-2, 0)
+rotation = 1.5707964
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="leftBorder" unique_id=1524646538]
+position = Vector2(452.99997, 39)
 shape = SubResource("RectangleShape2D_okh28")
 
 [node name="Player" parent="." unique_id=100103904 instance=ExtResource("1_ulcgi")]

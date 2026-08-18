@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="fighting game"
-run/main_scene="uid://duaqn1j2t863m"
+run/main_scene="uid://cq7albjp8mhc5"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -68,3 +68,4 @@ Punch={
 
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
+textures/vram_compression/import_etc2_astc=true
