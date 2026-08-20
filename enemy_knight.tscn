@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://ct74yoa54sp00" path="res://assets/Knight_1/Defend.png" id="5_4ixon"]
 [ext_resource type="Texture2D" uid="uid://c2a24pn66o71x" path="res://assets/Knight_1/Hurt.png" id="6_q80ii"]
 [ext_resource type="Texture2D" uid="uid://16mt8nron00k" path="res://assets/Knight_1/Jump.png" id="8_ohp43"]
-[ext_resource type="Texture2D" uid="uid://bmu3x1foa3qw5" path="res://assets/Knight_1/idle.png" id="8_u6p56"]
+[ext_resource type="Texture2D" uid="uid://bmu3x1foa3qw5" path="res://assets/Knight_1/Idle.png" id="8_u6p56"]
 [ext_resource type="Texture2D" uid="uid://cvl0b5f24vthw" path="res://assets/Knight_1/Protect.png" id="9_0s6uk"]
 [ext_resource type="Texture2D" uid="uid://bx7cxb1lrwhmd" path="res://assets/Knight_1/Run.png" id="10_icoqp"]
 [ext_resource type="Texture2D" uid="uid://0wf2c6m5wppy" path="res://assets/Knight_1/Run+Attack.png" id="11_nfei4"]
@@ -499,9 +499,7 @@ script = ExtResource("1_u6p56")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1426883779]
 position = Vector2(6, 1)
 sprite_frames = SubResource("SpriteFrames_okh28")
-animation = &"Attack2"
-frame = 3
-frame_progress = 1.0
+animation = &"Attack3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1414260099]
 position = Vector2(4, 35)

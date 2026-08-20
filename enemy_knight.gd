@@ -41,10 +41,9 @@ func _physics_process(delta):
 #
 	if not death:
 		if player and player.health > 0:
-			var dis = player.global_position
-			var distance = dis.x
-			var diff = abs(dis.x - position.x)
-			if position.x > player.global_position.x:
+			var distance = player.global_position
+			var diff = abs(distance.x - position.x)
+			if position.x > distance.x:
 				if not sprite.flip_h:
 					sprite.flip_h = true
 			else:
@@ -68,19 +67,25 @@ func _physics_process(delta):
 					velocity.x = -150
 				else:
 					velocity.x = 150
-			else:
-				pass
-			
+		
 		move_and_slide()
 		
 		if is_on_floor():
-			if Attack:
-				pass
-			else:
+			if not Attack:
 				if velocity.x != 0:
 					sprite.play("Walk")
 				else:
 					sprite.play("Idle")
+			elif Attack:
+				if sprite.animation == "Attack1":
+					if sprite.frame == 4:
+						current_collisionShape.set_deferred("disabled", false)
+				elif sprite.animation == "Attack2":
+					if sprite.frame == 2:
+						current_collisionShape.set_deferred("disabled", false)
+				elif sprite.animation == "Attack3":
+					if sprite.frame == 2:
+						current_collisionShape.set_deferred("disabled", false)
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if sprite.animation.begins_with("Attack"):
@@ -97,10 +102,13 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 			if player.health <= 0 :
 				if not player.death: 
 					player.Death()
-	
+
 func Death ():
+	if death:
+		return
 	death = true
-	current_collisionShape.set_deferred("disabled", true)
+	if current_collisionShape:
+		current_collisionShape.set_deferred("disabled", true)
 	#await get_tree().create_timer(0.3).timeout
 	#$Hurt_sound.play()
 	await get_tree().create_timer(1).timeout
@@ -111,18 +119,16 @@ func Death ():
 	await get_tree().create_timer(10).timeout
 	HUD.show_game_over2()
 
-
 func _on_player_detectionarea_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		player = body
-
 
 func _on_hurtbox_area_entered(area: Area2D) -> void:
 	#sprite.play("Hurt")
 	health -= 10
 	HUD.update_score_enemy(health)
 	if health <= 0 :
-		if not death: 
+		if not death:
 			Death()
 
 func start_attack():
@@ -140,4 +146,3 @@ func start_attack():
 		"Attack3":
 			current_collisionShape = Attack3_hitbox_CollisionShape
 			current_hitbox = Attack3_hitbox
-	current_collisionShape.set_deferred("disabled", false)
